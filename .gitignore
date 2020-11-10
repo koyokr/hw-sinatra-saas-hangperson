@@ -3,3 +3,6 @@ coverage
 TAGS
 .ruby-version
 *.swp
+
+vendor/bundle/
+typescript
