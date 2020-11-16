@@ -20,17 +20,19 @@ class HangpersonGame
   # And then in the irb: irb(main):001:0> HangpersonGame.get_random_word
   #  => "cooking"   <-- some random word
   def self.get_random_word
-    require 'uri'
-    require 'net/http'
-    uri = URI('http://watchout4snakes.com/Random/RandomWord')
-    Net::HTTP.new('watchout4snakes.com').start { |http|
-      return http.post(uri, "").body
-    }
+    require 'mockdata'
+    Mockdata::Words.one
+    # require 'uri'
+    # require 'net/http'
+    # uri = URI('http://watchout4snakes.com/Random/RandomWord')
+    # Net::HTTP.new('watchout4snakes.com').start { |http|
+    #   return http.post(uri, "").body
+    # }
   end
 
   def guess(c)
     raise ArgumentError.new if c.nil? or !/[A-Za-z]/.match? c
-    c = c.downcase
+    c.downcase!
     return false if @guesses.include? c or @wrong_guesses.include? c
     if @word.include? c
       @guesses += c
@@ -41,18 +43,12 @@ class HangpersonGame
   end
 
   def word_with_guesses
-    @word.chars.map { |c|
-      if @guesses.include? c then c else '-' end
-    }.join
+    @word.chars.map { |c| if @guesses.include? c then c else '-' end }.join
   end
 
   def check_win_or_lose
-    if @guesses.length + @wrong_guesses.length >= 7
-      :lose
-    elsif self.word_with_guesses == @word
-      :win
-    else
-      :play
-    end
+    return :lose if @wrong_guesses.length >= 7
+    return :win if self.word_with_guesses == @word
+    return :play
   end
 end

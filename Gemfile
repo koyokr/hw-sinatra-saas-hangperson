@@ -3,6 +3,7 @@ ruby '>= 2.3.1'
 
 gem 'sinatra', '>= 2.0.2'
 gem 'sinatra-flash', '0.3.0'
+gem 'mockdata', '~> 1.0', '>= 1.0.6'
 
 group :development, :test do
   gem 'cucumber', '2.0.0'
